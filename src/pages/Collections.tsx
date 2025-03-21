@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCollectionStore } from "@/lib/store";
@@ -5,10 +6,12 @@ import { Collection } from "@/lib/types";
 import Layout from "@/components/Layout";
 import DeleteConfirmation from "@/components/DeleteConfirmation";
 import { motion } from "framer-motion";
-import { Edit, Trash2, Video, Music, BookOpen, ExternalLink } from "lucide-react";
+import { Edit, Trash2, Video, Music, BookOpen, ExternalLink, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Collections = () => {
   const navigate = useNavigate();
@@ -17,6 +20,8 @@ const Collections = () => {
   
   const [collectionToDelete, setCollectionToDelete] = useState<string | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
 
   const handleDelete = (id: string) => {
     setCollectionToDelete(id);
@@ -65,16 +70,70 @@ const Collections = () => {
     });
   };
 
+  // Filter and search collections
+  const filteredCollections = collections.filter(collection => {
+    const matchesSearch = collection.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          collection.speaker.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          collection.summary.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesCategory = categoryFilter === "all" || collection.category === categoryFilter;
+    
+    return matchesSearch && matchesCategory;
+  });
+
   return (
     <Layout
       title="Semua Koleksi"
       subtitle="Kelola semua konten yang telah ditambahkan"
     >
       <div className="space-y-8">
-        {collections.length === 0 ? (
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="flex flex-col md:flex-row gap-4 items-center justify-between mb-6"
+        >
+          <div className="relative w-full md:w-64">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+            <Input
+              placeholder="Cari koleksi..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 w-full"
+            />
+          </div>
+          
+          <div className="flex items-center gap-3 w-full md:w-auto">
+            <div className="flex items-center gap-2">
+              <Filter size={18} className="text-gray-500" />
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger className="w-40">
+                  <SelectValue placeholder="Semua Kategori" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Semua Kategori</SelectItem>
+                  <SelectItem value="video">Video</SelectItem>
+                  <SelectItem value="audio">Audio</SelectItem>
+                  <SelectItem value="hadist">Hadist</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <Button
+              onClick={() => navigate("/create")}
+              className="ml-auto bg-blue-600 hover:bg-blue-700"
+            >
+              Tambah Baru
+            </Button>
+          </div>
+        </motion.div>
+
+        {filteredCollections.length === 0 ? (
           <div className="text-center py-12">
             <h3 className="text-lg font-medium text-gray-500">
-              Belum ada koleksi yang ditambahkan
+              {collections.length === 0 
+                ? "Belum ada koleksi yang ditambahkan" 
+                : "Tidak ada koleksi yang sesuai dengan filter"}
             </h3>
             <Button
               onClick={() => navigate("/create")}
@@ -85,7 +144,7 @@ const Collections = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {collections.map((collection, index) => (
+            {filteredCollections.map((collection, index) => (
               <motion.div
                 key={collection.id}
                 initial={{ opacity: 0, y: 20 }}
