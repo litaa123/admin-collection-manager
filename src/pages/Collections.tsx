@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCollectionStore } from "@/lib/store";
@@ -6,7 +5,7 @@ import { Collection } from "@/lib/types";
 import Layout from "@/components/Layout";
 import DeleteConfirmation from "@/components/DeleteConfirmation";
 import { motion } from "framer-motion";
-import { Edit, Trash2, Video, Music, BookOpen, External } from "lucide-react";
+import { Edit, Trash2, Video, Music, BookOpen, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -129,7 +128,7 @@ const Collections = () => {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 hover:underline"
                       >
-                        <External size={14} />
+                        <ExternalLink size={14} />
                         Buka Tautan
                       </a>
                     </div>
