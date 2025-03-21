@@ -23,7 +23,7 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-16">
             <Link to="/" className="font-bold text-xl text-blue-600 flex items-center gap-2">
               <span className="bg-blue-600 text-white p-1 rounded">Admin</span>
-              <span>Panel</span>
+              <span>Daarul Ilmi</span>
             </Link>
 
             <nav className="hidden md:flex space-x-1">

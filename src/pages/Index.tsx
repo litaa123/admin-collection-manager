@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { PlusCircle, FileText, Edit, Users, Video, Music, BookOpen } from "lucide-react";
@@ -85,6 +84,14 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 px-4 pt-16 pb-16">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="mb-4"
+          >
+            <span className="text-2xl font-semibold text-purple-700">Daarul Ilmi</span>
+          </motion.div>
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
