@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Create from "./pages/Create";
 import Collections from "./pages/Collections";
 import Edit from "./pages/Edit";
+import Feedback from "./pages/Feedback";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/create" element={<Create />} />
           <Route path="/collections" element={<Collections />} />
           <Route path="/edit/:id" element={<Edit />} />
+          <Route path="/feedback" element={<Feedback />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
