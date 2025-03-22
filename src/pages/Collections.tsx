@@ -6,7 +6,7 @@ import { Collection } from "@/lib/types";
 import Layout from "@/components/Layout";
 import DeleteConfirmation from "@/components/DeleteConfirmation";
 import { motion } from "framer-motion";
-import { Edit, Trash2, Video, Music, BookOpen, ExternalLink, Search, Filter } from "lucide-react";
+import { Edit, Trash2, Video, Music, BookOpen, ExternalLink, Search, Filter, Library, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -35,6 +35,11 @@ const Collections = () => {
       setCollectionToDelete(null);
     }
   };
+
+  // Count by category for statistics
+  const videoCount = collections.filter(c => c.category === 'video').length;
+  const audioCount = collections.filter(c => c.category === 'audio').length;
+  const hadistCount = collections.filter(c => c.category === 'hadist').length;
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -86,12 +91,45 @@ const Collections = () => {
       title="Semua Koleksi"
       subtitle="Kelola semua konten yang telah ditambahkan"
     >
+      {/* Colorful Header Banner */}
+      <div className="mb-12 -mt-12 py-12 px-6 bg-gradient-to-r from-orange-400 via-amber-300 to-yellow-300 rounded-lg shadow-lg">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+              <h2 className="text-3xl font-bold text-purple-900 mb-2">Perpustakaan Digital</h2>
+              <p className="text-purple-800 text-lg max-w-2xl">
+                Koleksi konten Islam berkualitas untuk meningkatkan ilmu dan pemahaman Anda
+              </p>
+            </div>
+            <div className="mt-4 md:mt-0 flex flex-col items-end">
+              <div className="flex gap-3 mb-3">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                  <Video className="w-4 h-4 mr-1" /> {videoCount} Video
+                </span>
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                  <Music className="w-4 h-4 mr-1" /> {audioCount} Audio
+                </span>
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                  <BookOpen className="w-4 h-4 mr-1" /> {hadistCount} Hadist
+                </span>
+              </div>
+              <Button
+                onClick={() => navigate("/create")}
+                className="bg-purple-600 hover:bg-purple-700 text-white"
+              >
+                Tambah Koleksi Baru
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <div className="space-y-8">
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="flex flex-col md:flex-row gap-4 items-center justify-between mb-6"
+          className="flex flex-col md:flex-row gap-4 items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-sm"
         >
           <div className="relative w-full md:w-64">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
@@ -118,26 +156,59 @@ const Collections = () => {
                 </SelectContent>
               </Select>
             </div>
-            
-            <Button
-              onClick={() => navigate("/create")}
-              className="ml-auto bg-blue-600 hover:bg-blue-700"
-            >
-              Tambah Baru
-            </Button>
           </div>
         </motion.div>
 
+        {/* Collection Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <Card className="bg-gradient-to-r from-blue-50 to-blue-100 border-none shadow-md">
+            <CardContent className="p-4 flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-blue-800">Video</h3>
+                <p className="text-2xl font-bold text-blue-900">{videoCount}</p>
+              </div>
+              <div className="bg-blue-200 p-3 rounded-full">
+                <Video className="text-blue-700 h-6 w-6" />
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-gradient-to-r from-purple-50 to-purple-100 border-none shadow-md">
+            <CardContent className="p-4 flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-purple-800">Audio</h3>
+                <p className="text-2xl font-bold text-purple-900">{audioCount}</p>
+              </div>
+              <div className="bg-purple-200 p-3 rounded-full">
+                <Music className="text-purple-700 h-6 w-6" />
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-gradient-to-r from-green-50 to-green-100 border-none shadow-md">
+            <CardContent className="p-4 flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-green-800">Hadist</h3>
+                <p className="text-2xl font-bold text-green-900">{hadistCount}</p>
+              </div>
+              <div className="bg-green-200 p-3 rounded-full">
+                <BookOpen className="text-green-700 h-6 w-6" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {filteredCollections.length === 0 ? (
-          <div className="text-center py-12">
-            <h3 className="text-lg font-medium text-gray-500">
+          <div className="text-center py-12 bg-gray-50 rounded-lg">
+            <Library className="mx-auto h-16 w-16 text-gray-300" />
+            <h3 className="text-lg font-medium text-gray-500 mt-4">
               {collections.length === 0 
                 ? "Belum ada koleksi yang ditambahkan" 
                 : "Tidak ada koleksi yang sesuai dengan filter"}
             </h3>
             <Button
               onClick={() => navigate("/create")}
-              className="mt-4 bg-blue-600 hover:bg-blue-700"
+              className="mt-4 bg-purple-600 hover:bg-purple-700"
             >
               Tambah Koleksi Baru
             </Button>
