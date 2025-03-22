@@ -13,9 +13,7 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    // Here you would handle the actual logout logic
     toast.success("Berhasil keluar dari sistem");
-    // In a real app, you would redirect to login page
   };
 
   const navItems = [
@@ -27,11 +25,11 @@ const Navbar = () => {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-10">
-      <div className="glass border-b border-slate-200/50 shadow-sm">
+      <div className="glass border-b border-slate-200/50 shadow-sm bg-gradient-to-r from-purple-100 via-pink-50 to-yellow-100">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <Link to="/" className="font-bold text-xl text-blue-600 flex items-center gap-2">
-              <span className="bg-blue-600 text-white p-1 rounded">Admin</span>
+            <Link to="/" className="font-bold text-xl text-purple-600 flex items-center gap-2">
+              <span className="bg-purple-600 text-white p-1 rounded">Admin</span>
               <span>Daarul Ilmi</span>
             </Link>
 
@@ -42,8 +40,8 @@ const Navbar = () => {
                   to={item.path}
                   className={`relative px-3 py-2 rounded-md text-sm font-medium hover-lift ${
                     isActive(item.path)
-                      ? "text-blue-600"
-                      : "text-gray-700 hover:text-blue-600"
+                      ? "text-purple-600"
+                      : "text-gray-700 hover:text-purple-600"
                   }`}
                 >
                   <div className="flex items-center gap-1.5">
@@ -53,7 +51,7 @@ const Navbar = () => {
                   {isActive(item.path) && (
                     <motion.div
                       layoutId="navbar-indicator"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 rounded-full"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600 rounded-full"
                       initial={false}
                       transition={{ type: "spring", stiffness: 500, damping: 30 }}
                     />
@@ -83,8 +81,7 @@ const Navbar = () => {
                 <LogOut size={18} />
               </Button>
               
-              {/* Mobile menu button */}
-              <button className="text-gray-700 hover:text-blue-600">
+              <button className="text-gray-700 hover:text-purple-600">
                 <span className="sr-only">Open main menu</span>
                 <svg
                   className="h-6 w-6"
