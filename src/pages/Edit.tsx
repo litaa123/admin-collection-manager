@@ -6,14 +6,13 @@ import { Category, CollectionFormData } from "@/lib/types";
 import Layout from "@/components/Layout";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { Check, Film, Music, Book, ImagePlus, Link as LinkIcon, User, Upload, FileVideo, FileAudio, File, ArrowLeft } from "lucide-react";
+import { Check, Film, Music, Book, ImagePlus, Link as LinkIcon, User, Upload, FileVideo, FileAudio, File } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const Edit = () => {
   const { id } = useParams<{ id: string }>();
@@ -33,7 +32,6 @@ const Edit = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [mediaFilePreview, setMediaFilePreview] = useState<string | null>(null);
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   
   // Create refs for file inputs
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -138,12 +136,8 @@ const Edit = () => {
         // 4. Then save to database
         
         updateCollection(id, formData);
-        setShowSuccessAlert(true);
-        
-        // Hide the alert after 3 seconds
-        setTimeout(() => {
-          setShowSuccessAlert(false);
-        }, 3000);
+        toast.success("Koleksi berhasil diperbarui");
+        navigate("/collections");
       }
     } catch (error) {
       console.error("Error updating collection:", error);
@@ -151,10 +145,6 @@ const Edit = () => {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const handleBack = () => {
-    navigate("/collections");
   };
 
   const fadeIn = {
@@ -188,22 +178,14 @@ const Edit = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50">
-      {/* Integrated colorful header */}
-      <div className="py-20 px-6 bg-gradient-to-r from-purple-400 via-purple-300 to-pink-300">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex items-center gap-2 mb-4">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handleBack}
-              className="bg-white/30 hover:bg-white/50 text-purple-900"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Kembali
-            </Button>
-          </div>
-          <h1 className="text-4xl font-bold text-purple-900 mb-2">Edit Koleksi</h1>
+    <Layout
+      title="Edit Koleksi"
+      subtitle="Perbarui informasi koleksi yang telah ada"
+    >
+      {/* Colorful Header Banner */}
+      <div className="mb-12 -mt-12 py-12 px-6 bg-gradient-to-r from-purple-400 via-purple-300 to-pink-300 rounded-lg shadow-lg">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-purple-900 mb-2">Edit Koleksi</h2>
           <p className="text-purple-800 text-lg max-w-2xl">
             Perbarui informasi koleksi untuk menyempurnakan perpustakaan digital Daarul Ilmi
           </p>
@@ -221,339 +203,312 @@ const Edit = () => {
         </div>
       </div>
       
-      <div className="container mx-auto py-12 px-4">
-        {showSuccessAlert && (
+      <div className="max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Form Column */}
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="mb-6"
+            initial="hidden"
+            animate="visible"
+            variants={fadeIn}
+            custom={0}
+            className="flex flex-col space-y-6"
           >
-            <Alert className="bg-green-100 border-green-200 text-green-800">
-              <AlertDescription className="flex items-center">
-                <Check className="h-4 w-4 mr-2" />
-                Koleksi berhasil diperbarui!
-              </AlertDescription>
-            </Alert>
-          </motion.div>
-        )}
-        
-        <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Form Column */}
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={fadeIn}
-              custom={0}
-              className="flex flex-col space-y-6"
-            >
-              <Card className="glass-card border-none shadow-lg overflow-hidden">
-                <div className="bg-gradient-to-r from-purple-100 to-pink-100 p-4 border-b border-purple-200">
-                  <h3 className="text-lg font-semibold text-purple-800">Detail Koleksi</h3>
-                </div>
-                <CardContent className="pt-6">
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    <motion.div className="space-y-2" variants={fadeIn} custom={1}>
-                      <Label htmlFor="title" className="text-sm font-medium">
-                        Judul
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="title"
-                          name="title"
-                          value={formData.title}
-                          onChange={handleChange}
-                          placeholder="Masukkan judul konten"
-                          className="pl-9 transition-all focus:ring-2 focus:ring-purple-500"
-                          required
-                        />
-                        <span className="absolute left-3 top-2.5 text-purple-500">
-                          <Book className="h-4 w-4" />
-                        </span>
-                      </div>
-                    </motion.div>
-
-                    <motion.div className="space-y-2" variants={fadeIn} custom={2}>
-                      <Label className="text-sm font-medium">Kategori</Label>
-                      <ToggleGroup
-                        type="single"
-                        value={formData.category}
-                        onValueChange={(value) => handleCategoryChange(value as Category)}
-                        className="grid grid-cols-3 gap-2"
-                      >
-                        <ToggleGroupItem 
-                          value="video" 
-                          aria-label="Video"
-                          className={`flex items-center justify-center py-2 ${formData.category === 'video' ? 'bg-yellow-100 text-yellow-700' : ''}`}
-                        >
-                          <Film className="h-4 w-4 mr-2" />
-                          <span>Video</span>
-                        </ToggleGroupItem>
-                        
-                        <ToggleGroupItem 
-                          value="audio" 
-                          aria-label="Audio"
-                          className={`flex items-center justify-center py-2 ${formData.category === 'audio' ? 'bg-purple-100 text-purple-700' : ''}`}
-                        >
-                          <Music className="h-4 w-4 mr-2" />
-                          <span>Audio</span>
-                        </ToggleGroupItem>
-                        
-                        <ToggleGroupItem 
-                          value="hadist" 
-                          aria-label="Hadist"
-                          className={`flex items-center justify-center py-2 ${formData.category === 'hadist' ? 'bg-pink-100 text-pink-700' : ''}`}
-                        >
-                          <Book className="h-4 w-4 mr-2" />
-                          <span>Hadist</span>
-                        </ToggleGroupItem>
-                      </ToggleGroup>
-                    </motion.div>
-
-                    <motion.div className="space-y-2" variants={fadeIn} custom={3}>
-                      <Label htmlFor="link" className="text-sm font-medium">
-                        Link Tautan
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="link"
-                          name="link"
-                          value={formData.link}
-                          onChange={handleChange}
-                          placeholder="https://example.com/video"
-                          className="pl-9 transition-all focus:ring-2 focus:ring-purple-500"
-                        />
-                        <span className="absolute left-3 top-2.5 text-purple-500">
-                          <LinkIcon className="h-4 w-4" />
-                        </span>
-                      </div>
-                    </motion.div>
-
-                    <motion.div className="space-y-2" variants={fadeIn} custom={4}>
-                      <Label htmlFor="summary" className="text-sm font-medium">
-                        Rangkuman
-                      </Label>
-                      <Textarea
-                        id="summary"
-                        name="summary"
-                        value={formData.summary}
+            <Card className="glass-card border-none shadow-lg overflow-hidden">
+              <div className="bg-gradient-to-r from-purple-100 to-pink-100 p-4 border-b border-purple-200">
+                <h3 className="text-lg font-semibold text-purple-800">Detail Koleksi</h3>
+              </div>
+              <CardContent className="pt-6">
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <motion.div className="space-y-2" variants={fadeIn} custom={1}>
+                    <Label htmlFor="title" className="text-sm font-medium">
+                      Judul
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="title"
+                        name="title"
+                        value={formData.title}
                         onChange={handleChange}
-                        placeholder="Masukkan rangkuman konten"
-                        className="resize-none h-24 transition-all focus:ring-2 focus:ring-purple-500"
+                        placeholder="Masukkan judul konten"
+                        className="pl-9 transition-all focus:ring-2 focus:ring-purple-500"
                         required
                       />
-                    </motion.div>
+                      <span className="absolute left-3 top-2.5 text-purple-500">
+                        <Book className="h-4 w-4" />
+                      </span>
+                    </div>
+                  </motion.div>
 
-                    <motion.div className="space-y-2" variants={fadeIn} custom={5}>
-                      <Label htmlFor="speaker" className="text-sm font-medium">
-                        Pemateri
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="speaker"
-                          name="speaker"
-                          value={formData.speaker}
-                          onChange={handleChange}
-                          placeholder="Nama pemateri"
-                          className="pl-9 transition-all focus:ring-2 focus:ring-purple-500"
-                          required
-                        />
-                        <span className="absolute left-3 top-2.5 text-purple-500">
-                          <User className="h-4 w-4" />
-                        </span>
-                      </div>
-                    </motion.div>
-
-                    {/* Media File Upload Field */}
-                    <motion.div className="space-y-2" variants={fadeIn} custom={6}>
-                      <Label htmlFor="mediaFile" className="text-sm font-medium">
-                        {getMediaTypeLabel()}
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          type="file"
-                          id="mediaFile"
-                          ref={mediaFileInputRef}
-                          className="hidden"
-                          accept={formData.category === 'video' ? ".mp4" : 
-                                 formData.category === 'audio' ? ".mp3" : 
-                                 ".pdf,.doc,.docx"}
-                          onChange={(e) => handleFileUpload(e, 'media')}
-                        />
-                        <div className="grid grid-cols-3 gap-2">
-                          <div className="col-span-2">
-                            <Input
-                              value={formData.mediaFile || ""}
-                              placeholder={`Pilih file ${formData.category}`}
-                              className="pl-9 transition-all focus:ring-2 focus:ring-purple-500"
-                              readOnly
-                            />
-                            <span className="absolute left-3 top-2.5 text-purple-500">
-                              {getMediaTypeIcon()}
-                            </span>
-                          </div>
-                          <Button 
-                            type="button"
-                            variant="outline"
-                            className="flex items-center gap-2"
-                            onClick={() => mediaFileInputRef.current?.click()}
-                          >
-                            <Upload className="h-4 w-4" />
-                            Pilih File
-                          </Button>
-                        </div>
-                      </div>
-                      {mediaFilePreview && formData.category === 'video' && (
-                        <div className="mt-2 bg-gray-50 p-3 rounded-md">
-                          <video 
-                            controls 
-                            className="w-full h-auto rounded-md" 
-                            src={mediaFilePreview}
-                          />
-                        </div>
-                      )}
-                      {mediaFilePreview && formData.category === 'audio' && (
-                        <div className="mt-2 bg-gray-50 p-3 rounded-md">
-                          <audio 
-                            controls 
-                            className="w-full"
-                            src={mediaFilePreview}
-                          />
-                        </div>
-                      )}
-                    </motion.div>
-
-                    <motion.div className="pt-2 flex gap-4" variants={fadeIn} custom={7}>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={handleBack}
-                        className="flex-1 items-center justify-center"
+                  <motion.div className="space-y-2" variants={fadeIn} custom={2}>
+                    <Label className="text-sm font-medium">Kategori</Label>
+                    <ToggleGroup
+                      type="single"
+                      value={formData.category}
+                      onValueChange={(value) => handleCategoryChange(value as Category)}
+                      className="grid grid-cols-3 gap-2"
+                    >
+                      <ToggleGroupItem 
+                        value="video" 
+                        aria-label="Video"
+                        className={`flex items-center justify-center py-2 ${formData.category === 'video' ? 'bg-yellow-100 text-yellow-700' : ''}`}
                       >
-                        <ArrowLeft className="h-4 w-4 mr-2" /> 
-                        Batal
-                      </Button>
-                      <Button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="flex-1 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white py-2 transition-all hover:shadow-lg flex items-center justify-center gap-2"
+                        <Film className="h-4 w-4 mr-2" />
+                        <span>Video</span>
+                      </ToggleGroupItem>
+                      
+                      <ToggleGroupItem 
+                        value="audio" 
+                        aria-label="Audio"
+                        className={`flex items-center justify-center py-2 ${formData.category === 'audio' ? 'bg-purple-100 text-purple-700' : ''}`}
                       >
-                        {isSubmitting ? (
-                          "Menyimpan..."
-                        ) : (
-                          <>
-                            <Check className="h-4 w-4" /> Perbarui Koleksi
-                          </>
-                        )}
-                      </Button>
-                    </motion.div>
-                  </form>
-                </CardContent>
-              </Card>
-            </motion.div>
+                        <Music className="h-4 w-4 mr-2" />
+                        <span>Audio</span>
+                      </ToggleGroupItem>
+                      
+                      <ToggleGroupItem 
+                        value="hadist" 
+                        aria-label="Hadist"
+                        className={`flex items-center justify-center py-2 ${formData.category === 'hadist' ? 'bg-pink-100 text-pink-700' : ''}`}
+                      >
+                        <Book className="h-4 w-4 mr-2" />
+                        <span>Hadist</span>
+                      </ToggleGroupItem>
+                    </ToggleGroup>
+                  </motion.div>
 
-            {/* Preview Column */}
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={fadeIn}
-              custom={1}
-              className="flex flex-col space-y-6"
-            >
-              <Card className="glass-card border-none shadow-lg overflow-hidden">
-                <div className="bg-gradient-to-r from-yellow-100 to-orange-100 p-4 border-b border-yellow-200">
-                  <h3 className="text-lg font-semibold text-yellow-800">Pratinjau Gambar</h3>
-                </div>
-                <CardContent className="pt-6">
-                  <div className="space-y-4">
-                    <Label htmlFor="coverImage" className="text-sm font-medium">
-                      Gambar Cover
+                  <motion.div className="space-y-2" variants={fadeIn} custom={3}>
+                    <Label htmlFor="link" className="text-sm font-medium">
+                      Link Tautan
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="link"
+                        name="link"
+                        value={formData.link}
+                        onChange={handleChange}
+                        placeholder="https://example.com/video"
+                        className="pl-9 transition-all focus:ring-2 focus:ring-purple-500"
+                      />
+                      <span className="absolute left-3 top-2.5 text-purple-500">
+                        <LinkIcon className="h-4 w-4" />
+                      </span>
+                    </div>
+                  </motion.div>
+
+                  <motion.div className="space-y-2" variants={fadeIn} custom={4}>
+                    <Label htmlFor="summary" className="text-sm font-medium">
+                      Rangkuman
+                    </Label>
+                    <Textarea
+                      id="summary"
+                      name="summary"
+                      value={formData.summary}
+                      onChange={handleChange}
+                      placeholder="Masukkan rangkuman konten"
+                      className="resize-none h-24 transition-all focus:ring-2 focus:ring-purple-500"
+                      required
+                    />
+                  </motion.div>
+
+                  <motion.div className="space-y-2" variants={fadeIn} custom={5}>
+                    <Label htmlFor="speaker" className="text-sm font-medium">
+                      Pemateri
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="speaker"
+                        name="speaker"
+                        value={formData.speaker}
+                        onChange={handleChange}
+                        placeholder="Nama pemateri"
+                        className="pl-9 transition-all focus:ring-2 focus:ring-purple-500"
+                        required
+                      />
+                      <span className="absolute left-3 top-2.5 text-purple-500">
+                        <User className="h-4 w-4" />
+                      </span>
+                    </div>
+                  </motion.div>
+
+                  {/* New Media File Upload Field */}
+                  <motion.div className="space-y-2" variants={fadeIn} custom={6}>
+                    <Label htmlFor="mediaFile" className="text-sm font-medium">
+                      {getMediaTypeLabel()}
                     </Label>
                     <div className="relative">
                       <Input
                         type="file"
-                        id="coverImage"
-                        ref={imageInputRef}
+                        id="mediaFile"
+                        ref={mediaFileInputRef}
                         className="hidden"
-                        accept=".jpg,.jpeg,.png"
-                        onChange={(e) => handleFileUpload(e, 'image')}
+                        accept={formData.category === 'video' ? ".mp4" : 
+                               formData.category === 'audio' ? ".mp3" : 
+                               ".pdf,.doc,.docx"}
+                        onChange={(e) => handleFileUpload(e, 'media')}
                       />
                       <div className="grid grid-cols-3 gap-2">
                         <div className="col-span-2">
                           <Input
-                            name="coverImage"
-                            value={formData.coverImage || ""}
-                            placeholder="Unggah gambar cover"
-                            onChange={handleChange}
-                            className="pl-9 transition-all focus:ring-2 focus:ring-yellow-500"
+                            value={formData.mediaFile || ""}
+                            placeholder={`Pilih file ${formData.category}`}
+                            className="pl-9 transition-all focus:ring-2 focus:ring-purple-500"
+                            readOnly
                           />
-                          <span className="absolute left-3 top-2.5 text-yellow-500">
-                            <ImagePlus className="h-4 w-4" />
+                          <span className="absolute left-3 top-2.5 text-purple-500">
+                            {getMediaTypeIcon()}
                           </span>
                         </div>
                         <Button 
                           type="button"
                           variant="outline"
                           className="flex items-center gap-2"
-                          onClick={() => imageInputRef.current?.click()}
+                          onClick={() => mediaFileInputRef.current?.click()}
                         >
                           <Upload className="h-4 w-4" />
-                          Unggah
+                          Pilih File
                         </Button>
                       </div>
                     </div>
-
-                    <div className="mt-4 bg-gray-50 rounded-lg p-4">
-                      <Label className="text-sm font-medium mb-2 block">Pratinjau Gambar</Label>
-                      <div className="aspect-video relative rounded-lg overflow-hidden border-2 border-dashed border-gray-300 bg-gray-100 flex items-center justify-center">
-                        {imagePreview ? (
-                          <img
-                            src={imagePreview}
-                            alt="Preview"
-                            className="w-full h-full object-cover"
-                            onError={() => setImagePreview(null)}
-                          />
-                        ) : (
-                          <div className="text-center p-4">
-                            <ImagePlus className="h-12 w-12 mx-auto text-gray-400" />
-                            <p className="text-sm text-gray-500 mt-2">
-                              Unggah gambar untuk melihat pratinjau
-                            </p>
-                          </div>
-                        )}
+                    {mediaFilePreview && formData.category === 'video' && (
+                      <div className="mt-2 bg-gray-50 p-3 rounded-md">
+                        <video 
+                          controls 
+                          className="w-full h-auto rounded-md" 
+                          src={mediaFilePreview}
+                        />
                       </div>
-                    </div>
+                    )}
+                    {mediaFilePreview && formData.category === 'audio' && (
+                      <div className="mt-2 bg-gray-50 p-3 rounded-md">
+                        <audio 
+                          controls 
+                          className="w-full"
+                          src={mediaFilePreview}
+                        />
+                      </div>
+                    )}
+                  </motion.div>
 
-                    <div className="mt-6 bg-purple-50 rounded-lg p-4">
-                      <h4 className="font-medium text-purple-700 mb-2">Tips Mengedit Koleksi</h4>
-                      <ul className="text-sm text-purple-600 space-y-2">
-                        <li className="flex items-start">
-                          <Check className="h-4 w-4 mr-2 mt-0.5 text-green-500" />
-                          Pastikan judul ringkas namun menjelaskan isi konten
-                        </li>
-                        <li className="flex items-start">
-                          <Check className="h-4 w-4 mr-2 mt-0.5 text-green-500" />
-                          Gunakan gambar beresolusi tinggi untuk cover
-                        </li>
-                        <li className="flex items-start">
-                          <Check className="h-4 w-4 mr-2 mt-0.5 text-green-500" />
-                          Format file yang didukung: MP4, MP3, JPG, PNG
-                        </li>
-                        <li className="flex items-start">
-                          <Check className="h-4 w-4 mr-2 mt-0.5 text-green-500" />
-                          Ukuran file maksimum adalah 10MB
-                        </li>
-                      </ul>
+                  <motion.div className="pt-2" variants={fadeIn} custom={7}>
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white py-2 transition-all hover:shadow-lg flex items-center justify-center gap-2"
+                    >
+                      {isSubmitting ? (
+                        "Menyimpan..."
+                      ) : (
+                        <>
+                          <Check className="h-4 w-4" /> Perbarui Koleksi
+                        </>
+                      )}
+                    </Button>
+                  </motion.div>
+                </form>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Preview Column */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeIn}
+            custom={1}
+            className="flex flex-col space-y-6"
+          >
+            <Card className="glass-card border-none shadow-lg overflow-hidden">
+              <div className="bg-gradient-to-r from-yellow-100 to-orange-100 p-4 border-b border-yellow-200">
+                <h3 className="text-lg font-semibold text-yellow-800">Pratinjau Gambar</h3>
+              </div>
+              <CardContent className="pt-6">
+                <div className="space-y-4">
+                  <Label htmlFor="coverImage" className="text-sm font-medium">
+                    Gambar Cover
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      type="file"
+                      id="coverImage"
+                      ref={imageInputRef}
+                      className="hidden"
+                      accept=".jpg,.jpeg,.png"
+                      onChange={(e) => handleFileUpload(e, 'image')}
+                    />
+                    <div className="grid grid-cols-3 gap-2">
+                      <div className="col-span-2">
+                        <Input
+                          name="coverImage"
+                          value={formData.coverImage || ""}
+                          placeholder="Unggah gambar cover"
+                          onChange={handleChange}
+                          className="pl-9 transition-all focus:ring-2 focus:ring-yellow-500"
+                        />
+                        <span className="absolute left-3 top-2.5 text-yellow-500">
+                          <ImagePlus className="h-4 w-4" />
+                        </span>
+                      </div>
+                      <Button 
+                        type="button"
+                        variant="outline"
+                        className="flex items-center gap-2"
+                        onClick={() => imageInputRef.current?.click()}
+                      >
+                        <Upload className="h-4 w-4" />
+                        Unggah
+                      </Button>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
+
+                  <div className="mt-4 bg-gray-50 rounded-lg p-4">
+                    <Label className="text-sm font-medium mb-2 block">Pratinjau Gambar</Label>
+                    <div className="aspect-video relative rounded-lg overflow-hidden border-2 border-dashed border-gray-300 bg-gray-100 flex items-center justify-center">
+                      {imagePreview ? (
+                        <img
+                          src={imagePreview}
+                          alt="Preview"
+                          className="w-full h-full object-cover"
+                          onError={() => setImagePreview(null)}
+                        />
+                      ) : (
+                        <div className="text-center p-4">
+                          <ImagePlus className="h-12 w-12 mx-auto text-gray-400" />
+                          <p className="text-sm text-gray-500 mt-2">
+                            Unggah gambar untuk melihat pratinjau
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mt-6 bg-purple-50 rounded-lg p-4">
+                    <h4 className="font-medium text-purple-700 mb-2">Tips Mengedit Koleksi</h4>
+                    <ul className="text-sm text-purple-600 space-y-2">
+                      <li className="flex items-start">
+                        <Check className="h-4 w-4 mr-2 mt-0.5 text-green-500" />
+                        Pastikan judul ringkas namun menjelaskan isi konten
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="h-4 w-4 mr-2 mt-0.5 text-green-500" />
+                        Gunakan gambar beresolusi tinggi untuk cover
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="h-4 w-4 mr-2 mt-0.5 text-green-500" />
+                        Format file yang didukung: MP4, MP3, JPG, PNG
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="h-4 w-4 mr-2 mt-0.5 text-green-500" />
+                        Ukuran file maksimum adalah 10MB
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 
