@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { PlusCircle, FileText, Edit, Users, Video, Music, BookOpen, Bell, Mail } from "lucide-react";
@@ -146,7 +145,7 @@ const Index = () => {
           className="bg-purple-200 rounded-xl p-6 mb-8 relative overflow-hidden"
         >
           <div className="flex flex-col md:flex-row gap-6 justify-between">
-            <div className="z-10 md:w-1/2">
+            <div className="z-10 md:w-full">
               <h1 className="text-3xl font-bold text-purple-900">Hi, Admin</h1>
               <p className="mt-2 text-purple-800">
                 Siap untuk mengelola konten Daarul Ilmi hari ini?
@@ -155,13 +154,6 @@ const Index = () => {
                 <PlusCircle size={18} />
                 Tambah Koleksi Baru
               </Link>
-            </div>
-            <div className="md:w-1/2 flex justify-end">
-              <img
-                src="/lovable-uploads/bb9dd6da-397e-4ef5-b766-60b61cdbf922.png"
-                alt="Dashboard Illustration"
-                className="h-40 object-contain"
-              />
             </div>
           </div>
         </motion.div>

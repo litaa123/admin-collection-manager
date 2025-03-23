@@ -12,6 +12,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Collections = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Collections = () => {
   const [collectionToDelete, setCollectionToDelete] = useState<string | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [activeTab, setActiveTab] = useState<string>("all");
 
   const handleDelete = (id: string) => {
     setCollectionToDelete(id);
@@ -75,16 +76,105 @@ const Collections = () => {
     });
   };
 
-  // Filter and search collections
+  // Filter collections based on search term and active tab
   const filteredCollections = collections.filter(collection => {
     const matchesSearch = collection.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           collection.speaker.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           collection.summary.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesCategory = categoryFilter === "all" || collection.category === categoryFilter;
+    const matchesCategory = activeTab === "all" || collection.category === activeTab;
     
     return matchesSearch && matchesCategory;
   });
+
+  // Group collections by category to display on tabs
+  const videoCollections = collections.filter(c => c.category === 'video' && 
+                                               (c.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                                c.speaker.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                                c.summary.toLowerCase().includes(searchTerm.toLowerCase())));
+  
+  const audioCollections = collections.filter(c => c.category === 'audio' && 
+                                               (c.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                                c.speaker.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                                c.summary.toLowerCase().includes(searchTerm.toLowerCase())));
+  
+  const hadistCollections = collections.filter(c => c.category === 'hadist' && 
+                                               (c.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                                c.speaker.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                                c.summary.toLowerCase().includes(searchTerm.toLowerCase())));
+
+  // Collection card component to avoid repetition
+  const CollectionCard = ({ collection }: { collection: Collection }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <Card className="overflow-hidden hover-lift h-full glass-card border-none">
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={collection.coverImage}
+            alt={collection.title}
+            className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
+          />
+          <div className="absolute top-2 right-2">
+            <Badge 
+              className={`flex items-center gap-1 px-2 py-1 font-medium ${getCategoryColor(collection.category)}`}
+            >
+              {getCategoryIcon(collection.category)}
+              {collection.category.charAt(0).toUpperCase() + collection.category.slice(1)}
+            </Badge>
+          </div>
+        </div>
+        
+        <CardContent className="pt-4">
+          <h3 className="font-bold text-lg line-clamp-1">{collection.title}</h3>
+          <p className="text-sm text-gray-500 mt-1">
+            Pemateri: {collection.speaker}
+          </p>
+          <p className="text-sm text-gray-500 mt-1">
+            Ditambahkan: {formatDate(collection.createdAt)}
+          </p>
+          <p className="text-sm text-gray-600 mt-2 line-clamp-3">
+            {collection.summary}
+          </p>
+          
+          <div className="mt-4">
+            <a
+              href={collection.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 hover:underline"
+            >
+              <ExternalLink size={14} />
+              Buka Tautan
+            </a>
+          </div>
+        </CardContent>
+        
+        <CardFooter className="flex justify-between pt-0 pb-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate(`/edit/${collection.id}`)}
+            className="flex items-center gap-1 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <Edit size={14} />
+            Edit
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleDelete(collection.id)}
+            className="flex items-center gap-1 text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors"
+          >
+            <Trash2 size={14} />
+            Hapus
+          </Button>
+        </CardFooter>
+      </Card>
+    </motion.div>
+  );
 
   return (
     <Layout
@@ -140,23 +230,6 @@ const Collections = () => {
               className="pl-10 w-full"
             />
           </div>
-          
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <div className="flex items-center gap-2">
-              <Filter size={18} className="text-gray-500" />
-              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                <SelectTrigger className="w-40">
-                  <SelectValue placeholder="Semua Kategori" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Semua Kategori</SelectItem>
-                  <SelectItem value="video">Video</SelectItem>
-                  <SelectItem value="audio">Audio</SelectItem>
-                  <SelectItem value="hadist">Hadist</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
         </motion.div>
 
         {/* Collection Stats */}
@@ -198,13 +271,11 @@ const Collections = () => {
           </Card>
         </div>
 
-        {filteredCollections.length === 0 ? (
+        {collections.length === 0 ? (
           <div className="text-center py-12 bg-gray-50 rounded-lg">
             <Library className="mx-auto h-16 w-16 text-gray-300" />
             <h3 className="text-lg font-medium text-gray-500 mt-4">
-              {collections.length === 0 
-                ? "Belum ada koleksi yang ditambahkan" 
-                : "Tidak ada koleksi yang sesuai dengan filter"}
+              Belum ada koleksi yang ditambahkan
             </h3>
             <Button
               onClick={() => navigate("/create")}
@@ -214,80 +285,102 @@ const Collections = () => {
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCollections.map((collection, index) => (
-              <motion.div
-                key={collection.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-              >
-                <Card className="overflow-hidden hover-lift h-full glass-card border-none">
-                  <div className="relative h-48 overflow-hidden">
-                    <img
-                      src={collection.coverImage}
-                      alt={collection.title}
-                      className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
-                    />
-                    <div className="absolute top-2 right-2">
-                      <Badge 
-                        className={`flex items-center gap-1 px-2 py-1 font-medium ${getCategoryColor(collection.category)}`}
-                      >
-                        {getCategoryIcon(collection.category)}
-                        {collection.category.charAt(0).toUpperCase() + collection.category.slice(1)}
-                      </Badge>
-                    </div>
-                  </div>
-                  
-                  <CardContent className="pt-4">
-                    <h3 className="font-bold text-lg line-clamp-1">{collection.title}</h3>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Pemateri: {collection.speaker}
-                    </p>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Ditambahkan: {formatDate(collection.createdAt)}
-                    </p>
-                    <p className="text-sm text-gray-600 mt-2 line-clamp-3">
-                      {collection.summary}
-                    </p>
-                    
-                    <div className="mt-4">
-                      <a
-                        href={collection.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 hover:underline"
-                      >
-                        <ExternalLink size={14} />
-                        Buka Tautan
-                      </a>
-                    </div>
-                  </CardContent>
-                  
-                  <CardFooter className="flex justify-between pt-0 pb-4">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => navigate(`/edit/${collection.id}`)}
-                      className="flex items-center gap-1 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                    >
-                      <Edit size={14} />
-                      Edit
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDelete(collection.id)}
-                      className="flex items-center gap-1 text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors"
-                    >
-                      <Trash2 size={14} />
-                      Hapus
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
+          <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="mb-6 grid grid-cols-4 h-auto">
+              <TabsTrigger value="all" className="py-3 data-[state=active]:bg-slate-100">
+                <div className="flex items-center gap-2">
+                  <Library size={16} />
+                  <span>Semua ({collections.length})</span>
+                </div>
+              </TabsTrigger>
+              <TabsTrigger value="video" className="py-3 data-[state=active]:bg-blue-100 data-[state=active]:text-blue-700">
+                <div className="flex items-center gap-2">
+                  <Video size={16} />
+                  <span>Video ({videoCount})</span>
+                </div>
+              </TabsTrigger>
+              <TabsTrigger value="audio" className="py-3 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-700">
+                <div className="flex items-center gap-2">
+                  <Music size={16} />
+                  <span>Audio ({audioCount})</span>
+                </div>
+              </TabsTrigger>
+              <TabsTrigger value="hadist" className="py-3 data-[state=active]:bg-green-100 data-[state=active]:text-green-700">
+                <div className="flex items-center gap-2">
+                  <BookOpen size={16} />
+                  <span>Hadist ({hadistCount})</span>
+                </div>
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="all">
+              {filteredCollections.length === 0 ? (
+                <div className="text-center py-12 bg-gray-50 rounded-lg">
+                  <Library className="mx-auto h-16 w-16 text-gray-300" />
+                  <h3 className="text-lg font-medium text-gray-500 mt-4">
+                    Tidak ada koleksi yang sesuai dengan filter
+                  </h3>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredCollections.map((collection) => (
+                    <CollectionCard key={collection.id} collection={collection} />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="video">
+              {videoCollections.length === 0 ? (
+                <div className="text-center py-12 bg-gray-50 rounded-lg">
+                  <Video className="mx-auto h-16 w-16 text-gray-300" />
+                  <h3 className="text-lg font-medium text-gray-500 mt-4">
+                    Tidak ada koleksi video yang sesuai dengan filter
+                  </h3>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {videoCollections.map((collection) => (
+                    <CollectionCard key={collection.id} collection={collection} />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="audio">
+              {audioCollections.length === 0 ? (
+                <div className="text-center py-12 bg-gray-50 rounded-lg">
+                  <Music className="mx-auto h-16 w-16 text-gray-300" />
+                  <h3 className="text-lg font-medium text-gray-500 mt-4">
+                    Tidak ada koleksi audio yang sesuai dengan filter
+                  </h3>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {audioCollections.map((collection) => (
+                    <CollectionCard key={collection.id} collection={collection} />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="hadist">
+              {hadistCollections.length === 0 ? (
+                <div className="text-center py-12 bg-gray-50 rounded-lg">
+                  <BookOpen className="mx-auto h-16 w-16 text-gray-300" />
+                  <h3 className="text-lg font-medium text-gray-500 mt-4">
+                    Tidak ada koleksi hadist yang sesuai dengan filter
+                  </h3>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {hadistCollections.map((collection) => (
+                    <CollectionCard key={collection.id} collection={collection} />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
         )}
       </div>
 
