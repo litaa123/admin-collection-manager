@@ -177,38 +177,45 @@ const Collections = () => {
   );
 
   return (
-    <Layout
-      title="Semua Koleksi"
-      subtitle="Kelola semua konten yang telah ditambahkan"
-    >
-      {/* Colorful Header Banner */}
-      <div className="mb-12 -mt-12 py-12 px-6 bg-gradient-to-r from-orange-400 via-amber-300 to-yellow-300 rounded-lg shadow-lg">
+    <Layout hideHeader={true}>
+      {/* Integrated Header Banner */}
+      <div className="mb-12 py-14 px-6 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 rounded-lg shadow-lg text-white">
         <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-purple-900 mb-2">Perpustakaan Digital</h2>
-              <p className="text-purple-800 text-lg max-w-2xl">
-                Koleksi konten Islam berkualitas untuk meningkatkan ilmu dan pemahaman Anda
-              </p>
-            </div>
-            <div className="mt-4 md:mt-0 flex flex-col items-end">
-              <div className="flex gap-3 mb-3">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                  <Video className="w-4 h-4 mr-1" /> {videoCount} Video
-                </span>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
-                  <Music className="w-4 h-4 mr-1" /> {audioCount} Audio
-                </span>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                  <BookOpen className="w-4 h-4 mr-1" /> {hadistCount} Hadist
-                </span>
+          <div className="flex flex-col items-center text-center mb-6">
+            <h1 className="text-4xl font-bold mb-3">Semua Koleksi</h1>
+            <p className="text-lg opacity-90 max-w-2xl">
+              Kelola semua konten yang telah ditambahkan
+            </p>
+            <div className="w-20 h-1 bg-yellow-300 rounded-full mt-4"></div>
+          </div>
+          
+          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg mt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-bold mb-2">Perpustakaan Digital</h2>
+                <p className="text-white/90 max-w-2xl">
+                  Koleksi konten Islam berkualitas untuk meningkatkan ilmu dan pemahaman Anda
+                </p>
               </div>
-              <Button
-                onClick={() => navigate("/create")}
-                className="bg-purple-600 hover:bg-purple-700 text-white"
-              >
-                Tambah Koleksi Baru
-              </Button>
+              <div className="mt-6 md:mt-0 flex flex-col items-end">
+                <div className="flex gap-3 mb-3">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-800/40 text-white">
+                    <Video className="w-4 h-4 mr-1" /> {videoCount} Video
+                  </span>
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-800/40 text-white">
+                    <Music className="w-4 h-4 mr-1" /> {audioCount} Audio
+                  </span>
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-800/40 text-white">
+                    <BookOpen className="w-4 h-4 mr-1" /> {hadistCount} Hadist
+                  </span>
+                </div>
+                <Button
+                  onClick={() => navigate("/create")}
+                  className="bg-white hover:bg-yellow-50 text-purple-700 hover:text-purple-800"
+                >
+                  Tambah Koleksi Baru
+                </Button>
+              </div>
             </div>
           </div>
         </div>
