@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useCollectionStore } from "@/lib/store";
@@ -6,7 +5,7 @@ import { Category, CollectionFormData } from "@/lib/types";
 import Layout from "@/components/Layout";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { Check, Film, Music, Book, ImagePlus, Link as LinkIcon, User, Upload, FileVideo, FileAudio, File } from "lucide-react";
+import { Check, Film, Music, Book, ImagePlus, Link as LinkIcon, User, Upload, FileVideo, FileAudio, File, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -33,7 +32,6 @@ const Edit = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [mediaFilePreview, setMediaFilePreview] = useState<string | null>(null);
   
-  // Create refs for file inputs
   const imageInputRef = useRef<HTMLInputElement>(null);
   const mediaFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -51,8 +49,6 @@ const Edit = () => {
           mediaFile: collection.mediaFile || "",
         });
         setImagePreview(collection.coverImage);
-        // If there's a media file, we would set the preview here
-        // But since we don't have actual files in this demo, we'll skip that
       } else {
         toast.error("Koleksi tidak ditemukan");
         navigate("/collections");
@@ -66,7 +62,6 @@ const Edit = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     
-    // Set image preview when coverImage URL changes
     if (name === "coverImage" && value) {
       setImagePreview(value);
     }
@@ -80,13 +75,11 @@ const Edit = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Check file size (limit to 10MB)
     if (file.size > 10 * 1024 * 1024) {
       toast.error("Ukuran file terlalu besar (maksimal 10MB)");
       return;
     }
 
-    // Validate file type
     if (fileType === 'image' && !file.type.match(/image\/(jpeg|jpg|png|gif)/i)) {
       toast.error("Format file tidak valid. Gunakan PNG, JPG, atau GIF");
       return;
@@ -101,7 +94,6 @@ const Edit = () => {
       }
     }
 
-    // Create object URL for preview
     const objectUrl = URL.createObjectURL(file);
     
     if (fileType === 'image') {
@@ -112,7 +104,6 @@ const Edit = () => {
       setFormData(prev => ({ ...prev, mediaFile: file.name }));
     }
     
-    // In a real app, you would upload this file to a server and get back a URL
     toast.success(`File ${file.name} siap diupload`);
   };
 
@@ -120,7 +111,6 @@ const Edit = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simple validation
     if (!formData.title || !formData.coverImage || !formData.speaker) {
       toast.error("Mohon lengkapi semua field yang diperlukan");
       setIsSubmitting(false);
@@ -129,12 +119,6 @@ const Edit = () => {
 
     try {
       if (id) {
-        // In a real app with file uploads, you would:
-        // 1. Upload files to server/storage
-        // 2. Get back URLs
-        // 3. Add those URLs to formData
-        // 4. Then save to database
-        
         updateCollection(id, formData);
         toast.success("Koleksi berhasil diperbarui");
         navigate("/collections");
@@ -145,6 +129,10 @@ const Edit = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleCancel = () => {
+    navigate("/collections");
   };
 
   const fadeIn = {
@@ -182,7 +170,6 @@ const Edit = () => {
       title="Edit Koleksi"
       subtitle="Perbarui informasi koleksi yang telah ada"
     >
-      {/* Colorful Header Banner */}
       <div className="mb-12 -mt-12 py-12 px-6 bg-gradient-to-r from-purple-400 via-purple-300 to-pink-300 rounded-lg shadow-lg">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold text-purple-900 mb-2">Edit Koleksi</h2>
@@ -205,7 +192,6 @@ const Edit = () => {
       
       <div className="max-w-5xl mx-auto">
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Form Column */}
           <motion.div
             initial="hidden"
             animate="visible"
@@ -330,7 +316,6 @@ const Edit = () => {
                     </div>
                   </motion.div>
 
-                  {/* New Media File Upload Field */}
                   <motion.div className="space-y-2" variants={fadeIn} custom={6}>
                     <Label htmlFor="mediaFile" className="text-sm font-medium">
                       {getMediaTypeLabel()}
@@ -389,11 +374,11 @@ const Edit = () => {
                     )}
                   </motion.div>
 
-                  <motion.div className="pt-2" variants={fadeIn} custom={7}>
+                  <motion.div className="pt-2 flex gap-3" variants={fadeIn} custom={7}>
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white py-2 transition-all hover:shadow-lg flex items-center justify-center gap-2"
+                      className="flex-1 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white py-2 transition-all hover:shadow-lg flex items-center justify-center gap-2"
                     >
                       {isSubmitting ? (
                         "Menyimpan..."
@@ -403,13 +388,20 @@ const Edit = () => {
                         </>
                       )}
                     </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleCancel}
+                      className="flex items-center justify-center gap-2"
+                    >
+                      <ArrowLeft className="h-4 w-4" /> Kembali
+                    </Button>
                   </motion.div>
                 </form>
               </CardContent>
             </Card>
           </motion.div>
 
-          {/* Preview Column */}
           <motion.div
             initial="hidden"
             animate="visible"
