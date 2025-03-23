@@ -177,7 +177,7 @@ const Collections = () => {
   );
 
   return (
-    <Layout hideHeader={true}>
+    <Layout title="Semua Koleksi" hideHeader={true}>
       {/* Integrated Header Banner */}
       <div className="mb-12 py-14 px-6 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 rounded-lg shadow-lg text-white">
         <div className="max-w-5xl mx-auto">
