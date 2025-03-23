@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useCollectionStore } from "@/lib/store";
@@ -166,26 +167,36 @@ const Edit = () => {
   };
 
   return (
-    <Layout
-      title="Edit Koleksi"
-      subtitle="Perbarui informasi koleksi yang telah ada"
-    >
-      <div className="mb-12 -mt-12 py-12 px-6 bg-gradient-to-r from-purple-400 via-purple-300 to-pink-300 rounded-lg shadow-lg">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-purple-900 mb-2">Edit Koleksi</h2>
-          <p className="text-purple-800 text-lg max-w-2xl">
-            Perbarui informasi koleksi untuk menyempurnakan perpustakaan digital Daarul Ilmi
+    <Layout title="Edit Koleksi" hideHeader={true}>
+      {/* Integrated Header Banner */}
+      <div className="mb-12 py-14 px-6 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 rounded-lg shadow-lg text-white">
+        <div className="max-w-5xl mx-auto">
+          <h1 className="text-3xl font-bold mb-2">Edit Koleksi</h1>
+          <p className="text-blue-100 text-lg max-w-3xl">
+            Perbarui informasi koleksi yang telah ada
           </p>
-          <div className="mt-4 flex gap-2">
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
-              <Film className="w-4 h-4 mr-1" /> Video
-            </span>
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-pink-100 text-pink-800">
-              <Music className="w-4 h-4 mr-1" /> Audio
-            </span>
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
-              <Book className="w-4 h-4 mr-1" /> Hadist
-            </span>
+          
+          <div className="h-px bg-gradient-to-r from-blue-200/30 via-white/60 to-blue-200/30 my-4"></div>
+          
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-3">
+            <div>
+              <h3 className="text-xl font-medium text-white">Perpustakaan Digital</h3>
+              <p className="text-blue-100 text-sm mt-1">
+                Koleksi konten Islam berkualitas untuk meningkatkan ilmu dan pemahaman Anda
+              </p>
+            </div>
+            
+            <div className="flex gap-3 mt-4 md:mt-0">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-700/50 text-white">
+                <Film className="w-4 h-4 mr-1" /> Video
+              </span>
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-700/50 text-white">
+                <Music className="w-4 h-4 mr-1" /> Audio
+              </span>
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-700/50 text-white">
+                <Book className="w-4 h-4 mr-1" /> Hadist
+              </span>
+            </div>
           </div>
         </div>
       </div>

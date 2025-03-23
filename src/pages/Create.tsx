@@ -152,27 +152,36 @@ const Create = () => {
   };
 
   return (
-    <Layout
-      title="Tambah Koleksi Baru"
-      subtitle="Tambahkan konten baru ke dalam sistem perpustakaan digital Anda"
-    >
-      {/* Colorful Header Banner */}
-      <div className="mb-12 -mt-12 py-12 px-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-amber-300 rounded-lg shadow-lg">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-purple-900 mb-2">Tambah Koleksi Baru</h2>
-          <p className="text-purple-800 text-lg max-w-2xl">
-            Tambahkan konten berkualitas untuk memperkaya khazanah ilmu pengetahuan Islam dalam perpustakaan digital Daarul Ilmi
+    <Layout title="Tambah Koleksi Baru" hideHeader={true}>
+      {/* Integrated Header Banner */}
+      <div className="mb-12 py-14 px-6 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 rounded-lg shadow-lg text-white">
+        <div className="max-w-5xl mx-auto">
+          <h1 className="text-3xl font-bold mb-2">Tambah Koleksi Baru</h1>
+          <p className="text-blue-100 text-lg max-w-3xl">
+            Tambahkan konten baru ke dalam sistem perpustakaan digital Anda
           </p>
-          <div className="mt-4 flex gap-2">
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
-              <Film className="w-4 h-4 mr-1" /> Video
-            </span>
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-              <Music className="w-4 h-4 mr-1" /> Audio
-            </span>
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-              <Book className="w-4 h-4 mr-1" /> Hadist
-            </span>
+          
+          <div className="h-px bg-gradient-to-r from-blue-200/30 via-white/60 to-blue-200/30 my-4"></div>
+          
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-3">
+            <div>
+              <h3 className="text-xl font-medium text-white">Perpustakaan Digital</h3>
+              <p className="text-blue-100 text-sm mt-1">
+                Koleksi konten Islam berkualitas untuk meningkatkan ilmu dan pemahaman Anda
+              </p>
+            </div>
+            
+            <div className="flex gap-3 mt-4 md:mt-0">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-700/50 text-white">
+                <Film className="w-4 h-4 mr-1" /> Video
+              </span>
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-700/50 text-white">
+                <Music className="w-4 h-4 mr-1" /> Audio
+              </span>
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-700/50 text-white">
+                <Book className="w-4 h-4 mr-1" /> Hadist
+              </span>
+            </div>
           </div>
         </div>
       </div>
