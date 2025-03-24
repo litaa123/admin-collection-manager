@@ -1,7 +1,10 @@
-import { Link } from "react-router-dom";
+
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { PlusCircle, FileText, Edit, Users, Video, Music, BookOpen, Bell, Mail } from "lucide-react";
+import { PlusCircle, FileText, Edit, Users, Video, Music, BookOpen, Bell, Mail, LogOut } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { 
   ChartContainer, 
   ChartTooltip, 
@@ -23,11 +26,24 @@ import { useCollectionStore } from "@/lib/store";
 
 const Index = () => {
   const collections = useCollectionStore((state) => state.collections);
+  const navigate = useNavigate();
   
   // Count collections by category
   const videosCount = collections.filter(c => c.category === "video").length;
   const audioCount = collections.filter(c => c.category === "audio").length;
   const hadistCount = collections.filter(c => c.category === "hadist").length;
+
+  const handleLogout = () => {
+    // In a real application, this would clear authentication state
+    toast.success("Anda berhasil logout", {
+      description: "Terima kasih telah menggunakan Admin Daarul Ilmi"
+    });
+    
+    // Redirect to home page after logout
+    setTimeout(() => {
+      navigate("/");
+    }, 1500);
+  };
 
   // Mock visitor data for statistics
   const visitorData = [
@@ -134,6 +150,16 @@ const Index = () => {
               </div>
               <span className="text-sm font-medium text-purple-900">Admin</span>
             </div>
+            
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={handleLogout}
+              className="flex items-center gap-1.5 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+            >
+              <LogOut size={16} />
+              <span className="hidden sm:inline">Logout</span>
+            </Button>
           </div>
         </div>
 
