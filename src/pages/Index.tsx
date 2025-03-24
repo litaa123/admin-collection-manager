@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { PlusCircle, FileText, Edit, Users, Video, Music, BookOpen, Bell, Mail, LogOut, Star, StarOff, MessageCircle } from "lucide-react";
+import { PlusCircle, FileText, Edit, Users, Video, Music, BookOpen, Bell, Mail, LogOut, Star, StarOff, MessageCircle, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -25,7 +25,6 @@ import { useCollectionStore } from "@/lib/store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-// Mock feedback data type
 interface Feedback {
   id: string;
   username: string;
@@ -39,24 +38,20 @@ const Index = () => {
   const collections = useCollectionStore((state) => state.collections);
   const navigate = useNavigate();
   
-  // Count collections by category
   const videosCount = collections.filter(c => c.category === "video").length;
   const audioCount = collections.filter(c => c.category === "audio").length;
   const hadistCount = collections.filter(c => c.category === "hadist").length;
 
   const handleLogout = () => {
-    // In a real application, this would clear authentication state
     toast.success("Anda berhasil logout", {
       description: "Terima kasih telah menggunakan Admin Daarul Ilmi"
     });
     
-    // Redirect to home page after logout
     setTimeout(() => {
       navigate("/");
     }, 1500);
   };
 
-  // Mock visitor data for statistics
   const visitorData = [
     { name: "Sen", visitors: 120 },
     { name: "Sel", visitors: 230 },
@@ -76,7 +71,6 @@ const Index = () => {
     { name: "Jun", visitors: 2800 }
   ];
 
-  // Mock feedback data
   const feedbackData: Feedback[] = [
     {
       id: "feed1",
@@ -118,14 +112,11 @@ const Index = () => {
     }
   ];
 
-  // Sort feedback by date, newest first
   const sortedFeedback = [...feedbackData].sort((a, b) => b.date.getTime() - a.date.getTime());
 
-  // Calculate average rating
   const averageRating = feedbackData.reduce((sum, item) => sum + item.rating, 0) / feedbackData.length;
-  const roundedAverage = Math.round(averageRating * 10) / feedbackData.length; // Round to 1 decimal place
+  const roundedAverage = Math.round(averageRating * 10) / feedbackData.length;
 
-  // Prepare data for collection type chart
   const collectionTypeData = [
     { name: "Video", value: videosCount, fill: "#3b82f6" },
     { name: "Audio", value: audioCount, fill: "#8b5cf6" },
@@ -156,7 +147,6 @@ const Index = () => {
     },
   ];
 
-  // Stats cards for the dashboard
   const statsCards = [
     {
       title: "Koleksi Video",
@@ -188,7 +178,6 @@ const Index = () => {
     }
   ];
 
-  // Function to render star rating
   const renderStarRating = (rating: number) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -201,7 +190,6 @@ const Index = () => {
     return <div className="flex">{stars}</div>;
   };
 
-  // Format date for display
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('id-ID', {
       day: 'numeric', 
@@ -215,7 +203,6 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-yellow-100 px-4 pt-10 pb-16">
       <div className="max-w-7xl mx-auto">
-        {/* Header with user welcome message */}
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-2">
             <span className="bg-purple-600 text-white p-2 rounded-lg font-bold">Admin</span>
@@ -247,7 +234,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Welcome Banner */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -268,7 +254,6 @@ const Index = () => {
           </div>
         </motion.div>
 
-        {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {statsCards.map((stat, index) => (
             <motion.div
@@ -293,7 +278,6 @@ const Index = () => {
           ))}
         </div>
 
-        {/* Feature Cards Section */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -328,7 +312,6 @@ const Index = () => {
           </div>
         </motion.div>
 
-        {/* Feedback Section */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -348,7 +331,6 @@ const Index = () => {
             </div>
           </div>
           
-          {/* Feedback cards */}
           <div className="bg-white rounded-xl shadow-sm overflow-hidden">
             <div className="divide-y divide-gray-100">
               {sortedFeedback.map((feedback) => (
@@ -375,10 +357,16 @@ const Index = () => {
                 </div>
               ))}
             </div>
+            
+            <div className="p-4 bg-purple-50 border-t border-purple-100">
+              <Link to="/feedback" className="w-full flex justify-center items-center gap-2 py-3 px-4 text-purple-700 font-medium hover:bg-purple-100 rounded-lg transition-colors">
+                LIHAT SEMUA FEEDBACK
+                <ArrowRight size={18} />
+              </Link>
+            </div>
           </div>
         </motion.div>
 
-        {/* Recent Content Section */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -445,7 +433,6 @@ const Index = () => {
           )}
         </motion.div>
 
-        {/* Statistics Section */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

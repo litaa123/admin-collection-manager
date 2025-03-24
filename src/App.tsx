@@ -10,6 +10,7 @@ import Create from "./pages/Create";
 import Collections from "./pages/Collections";
 import Edit from "./pages/Edit";
 import NotFound from "./pages/NotFound";
+import Feedback from "./pages/Feedback";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/create" element={<Create />} />
             <Route path="/collections" element={<Collections />} />
             <Route path="/edit/:id" element={<Edit />} />
+            <Route path="/feedback" element={<Feedback />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
