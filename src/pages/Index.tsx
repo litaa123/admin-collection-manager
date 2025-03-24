@@ -1,3 +1,4 @@
+
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { PlusCircle, FileText, Edit, Users, Video, Music, BookOpen, Bell, Mail, LogOut, Star, StarOff, MessageCircle, ArrowRight } from "lucide-react";
@@ -201,25 +202,25 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-yellow-100 px-4 pt-10 pb-16">
+    <div className="min-h-screen bg-white px-4 pt-10 pb-16">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-2">
-            <span className="bg-purple-600 text-white p-2 rounded-lg font-bold">Admin</span>
-            <span className="font-bold text-xl text-purple-800">Daarul Ilmi</span>
+            <span className="bg-blue-600 text-white p-2 rounded-lg font-bold">Admin</span>
+            <span className="font-bold text-xl text-blue-800">Daarul Ilmi</span>
           </div>
           <div className="flex items-center gap-4">
-            <button className="p-2 rounded-full bg-white/80 hover:bg-white">
+            <button className="p-2 rounded-full bg-white/80 hover:bg-white shadow">
               <Mail size={20} className="text-gray-600" />
             </button>
-            <button className="p-2 rounded-full bg-white/80 hover:bg-white">
+            <button className="p-2 rounded-full bg-white/80 hover:bg-white shadow">
               <Bell size={20} className="text-gray-600" />
             </button>
-            <div className="flex items-center gap-2 bg-purple-200 p-1 pl-2 pr-3 rounded-full">
-              <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">
+            <div className="flex items-center gap-2 bg-blue-100 p-1 pl-2 pr-3 rounded-full">
+              <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
                 A
               </div>
-              <span className="text-sm font-medium text-purple-900">Admin</span>
+              <span className="text-sm font-medium text-blue-900">Admin</span>
             </div>
             
             <Button 
@@ -238,15 +239,15 @@ const Index = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-purple-200 rounded-xl p-6 mb-8 relative overflow-hidden"
+          className="bg-blue-100 rounded-xl p-6 mb-8 relative overflow-hidden"
         >
           <div className="flex flex-col md:flex-row gap-6 justify-between">
             <div className="z-10 md:w-full">
-              <h1 className="text-3xl font-bold text-purple-900">Hi, Admin</h1>
-              <p className="mt-2 text-purple-800">
+              <h1 className="text-3xl font-bold text-blue-900">Hi, Admin</h1>
+              <p className="mt-2 text-blue-800">
                 Siap untuk mengelola konten Daarul Ilmi hari ini?
               </p>
-              <Link to="/create" className="mt-4 inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-purple-900 font-medium py-2 px-4 rounded-lg transition-colors">
+              <Link to="/create" className="mt-4 inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
                 <PlusCircle size={18} />
                 Tambah Koleksi Baru
               </Link>
@@ -262,7 +263,7 @@ const Index = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
-              <Card className={`${stat.color} border-none shadow-md hover:shadow-lg transition-shadow`}>
+              <Card className={`bg-blue-500 border-none shadow-md hover:shadow-lg transition-shadow`}>
                 <CardContent className="p-4 flex flex-col">
                   <div className="flex justify-between items-center mb-2">
                     <div className="text-white/90 font-medium">{stat.title}</div>
@@ -284,7 +285,7 @@ const Index = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mb-8"
         >
-          <h2 className="text-xl font-bold text-purple-900 mb-4">Kelola Konten</h2>
+          <h2 className="text-xl font-bold text-blue-900 mb-4">Kelola Konten</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <motion.div
@@ -295,13 +296,13 @@ const Index = () => {
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
                 <Link to={feature.link} className="block">
-                  <div className="bg-white rounded-xl p-6 h-full transition-all overflow-hidden group border border-transparent hover:border-purple-200 shadow-sm hover:shadow-md">
+                  <div className="bg-white rounded-xl p-6 h-full transition-all overflow-hidden group border border-blue-100 hover:border-blue-200 shadow-sm hover:shadow-md">
                     <div
-                      className={`${feature.color} rounded-full p-3 inline-flex mb-4 text-white shadow-md`}
+                      className={`bg-blue-500 rounded-full p-3 inline-flex mb-4 text-white shadow-md`}
                     >
                       <feature.icon size={24} />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-purple-700 transition-colors">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">
                       {feature.title}
                     </h3>
                     <p className="text-gray-600">{feature.description}</p>
@@ -319,28 +320,28 @@ const Index = () => {
           className="mb-8"
         >
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-purple-900">Feedback Pengguna</h2>
+            <h2 className="text-xl font-bold text-blue-900">Feedback Pengguna</h2>
             <div className="flex items-center gap-2">
-              <MessageCircle className="text-purple-500" size={18} />
-              <span className="text-purple-900 font-medium">{feedbackData.length} feedback</span>
+              <MessageCircle className="text-blue-500" size={18} />
+              <span className="text-blue-900 font-medium">{feedbackData.length} feedback</span>
               <span className="mx-2 text-gray-400">|</span>
               <div className="flex items-center gap-1">
                 <Star className="h-5 w-5 text-yellow-500 fill-yellow-500" />
-                <span className="text-purple-900 font-medium">{roundedAverage}</span>
+                <span className="text-blue-900 font-medium">{roundedAverage}</span>
               </div>
             </div>
           </div>
           
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div className="divide-y divide-gray-100">
+          <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-blue-100">
+            <div className="divide-y divide-blue-100">
               {sortedFeedback.map((feedback) => (
-                <div key={feedback.id} className="p-4 hover:bg-purple-50 transition-colors">
+                <div key={feedback.id} className="p-4 hover:bg-blue-50 transition-colors">
                   <div className="flex items-start gap-3">
-                    <Avatar className="h-10 w-10 border border-purple-100">
+                    <Avatar className="h-10 w-10 border border-blue-100">
                       {feedback.userAvatar ? (
                         <AvatarImage src={feedback.userAvatar} alt={feedback.username} />
                       ) : (
-                        <AvatarFallback className="bg-purple-200 text-purple-800">
+                        <AvatarFallback className="bg-blue-200 text-blue-800">
                           {feedback.username.substring(0, 2).toUpperCase()}
                         </AvatarFallback>
                       )}
@@ -358,8 +359,8 @@ const Index = () => {
               ))}
             </div>
             
-            <div className="p-4 bg-purple-50 border-t border-purple-100">
-              <Link to="/feedback" className="w-full flex justify-center items-center gap-2 py-3 px-4 text-purple-700 font-medium hover:bg-purple-100 rounded-lg transition-colors">
+            <div className="p-4 bg-blue-50 border-t border-blue-100">
+              <Link to="/feedback" className="w-full flex justify-center items-center gap-2 py-3 px-4 text-blue-700 font-medium hover:bg-blue-100 rounded-lg transition-colors">
                 LIHAT SEMUA FEEDBACK
                 <ArrowRight size={18} />
               </Link>
@@ -374,8 +375,8 @@ const Index = () => {
           className="mb-8"
         >
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-purple-900">Konten Terbaru</h2>
-            <Link to="/collections" className="text-purple-600 hover:text-purple-800 text-sm font-medium">
+            <h2 className="text-xl font-bold text-blue-900">Konten Terbaru</h2>
+            <Link to="/collections" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
               Lihat Semua
             </Link>
           </div>
@@ -383,7 +384,7 @@ const Index = () => {
           {collections.length > 0 ? (
             <div className="space-y-4">
               {collections.slice(0, 3).map((collection) => (
-                <div key={collection.id} className="bg-white rounded-lg shadow-sm hover:shadow-md p-4 transition-shadow">
+                <div key={collection.id} className="bg-white rounded-lg shadow-sm hover:shadow-md p-4 transition-shadow border border-blue-100">
                   <div className="flex items-center gap-4">
                     <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0">
                       <img 
@@ -401,8 +402,8 @@ const Index = () => {
                       <p className="text-sm text-gray-500 line-clamp-1">{collection.summary}</p>
                       <div className="flex items-center gap-2 mt-1">
                         <span className={`inline-block w-2 h-2 rounded-full ${
-                          collection.category === 'video' ? 'bg-yellow-500' : 
-                          collection.category === 'audio' ? 'bg-purple-500' : 'bg-pink-500'
+                          collection.category === 'video' ? 'bg-blue-400' : 
+                          collection.category === 'audio' ? 'bg-blue-600' : 'bg-blue-800'
                         }`}></span>
                         <span className="text-xs capitalize text-gray-600">{collection.category}</span>
                       </div>
@@ -410,7 +411,7 @@ const Index = () => {
                     <div className="flex gap-2">
                       <Link 
                         to={`/edit/${collection.id}`} 
-                        className="p-2 text-gray-500 hover:text-purple-600 rounded-full hover:bg-purple-50"
+                        className="p-2 text-gray-500 hover:text-blue-600 rounded-full hover:bg-blue-50"
                       >
                         <Edit size={16} />
                       </Link>
@@ -420,11 +421,11 @@ const Index = () => {
               ))}
             </div>
           ) : (
-            <div className="bg-white rounded-lg p-8 text-center">
+            <div className="bg-white rounded-lg p-8 text-center border border-blue-100">
               <div className="text-gray-500">Belum ada koleksi yang ditambahkan</div>
               <Link 
                 to="/create"
-                className="mt-4 inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+                className="mt-4 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
               >
                 <PlusCircle size={18} />
                 Tambah Koleksi
@@ -439,11 +440,11 @@ const Index = () => {
           transition={{ duration: 0.5, delay: 0.5 }}
         >
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-purple-900">Statistik Kunjungan</h2>
+            <h2 className="text-xl font-bold text-blue-900">Statistik Kunjungan</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="bg-white border-none shadow-sm">
+            <Card className="bg-white border border-blue-100 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg font-medium text-gray-900">Kunjungan Mingguan</CardTitle>
               </CardHeader>
@@ -453,7 +454,7 @@ const Index = () => {
                     config={{
                       visitors: {
                         label: "Pengunjung",
-                        color: "#8b5cf6"
+                        color: "#3b82f6"
                       }
                     }}
                   >
@@ -463,12 +464,12 @@ const Index = () => {
                       <YAxis />
                       <ChartTooltip 
                         content={<ChartTooltipContent />} 
-                        cursor={{fill: 'rgba(139, 92, 246, 0.1)'}} 
+                        cursor={{fill: 'rgba(59, 130, 246, 0.1)'}} 
                       />
                       <Bar 
                         dataKey="visitors" 
                         name="visitors" 
-                        fill="var(--color-visitors, #8b5cf6)" 
+                        fill="var(--color-visitors, #3b82f6)" 
                         radius={[4, 4, 0, 0]} 
                       />
                     </BarChart>
@@ -477,7 +478,7 @@ const Index = () => {
               </CardContent>
             </Card>
             
-            <Card className="bg-white border-none shadow-sm">
+            <Card className="bg-white border border-blue-100 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg font-medium text-gray-900">Tren Kunjungan Bulanan</CardTitle>
               </CardHeader>
@@ -487,7 +488,7 @@ const Index = () => {
                     config={{
                       visitors: {
                         label: "Pengunjung",
-                        color: "#ec4899"
+                        color: "#1d4ed8"
                       }
                     }}
                   >
@@ -497,13 +498,13 @@ const Index = () => {
                       <YAxis />
                       <ChartTooltip 
                         content={<ChartTooltipContent />} 
-                        cursor={{fill: 'rgba(236, 72, 153, 0.1)'}} 
+                        cursor={{fill: 'rgba(29, 78, 216, 0.1)'}} 
                       />
                       <Line 
                         type="monotone" 
                         dataKey="visitors" 
                         name="visitors" 
-                        stroke="var(--color-visitors, #ec4899)" 
+                        stroke="var(--color-visitors, #1d4ed8)" 
                         strokeWidth={2} 
                         dot={{ r: 4 }} 
                         activeDot={{ r: 6 }} 
