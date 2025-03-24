@@ -1,7 +1,6 @@
-
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { PlusCircle, FileText, Edit, Users, Video, Music, BookOpen, Bell, Mail, LogOut } from "lucide-react";
+import { PlusCircle, FileText, Edit, Users, Video, Music, BookOpen, Bell, Mail, LogOut, Star, StarOff, MessageCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -23,6 +22,18 @@ import {
   ResponsiveContainer 
 } from "recharts";
 import { useCollectionStore } from "@/lib/store";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+
+// Mock feedback data type
+interface Feedback {
+  id: string;
+  username: string;
+  userAvatar?: string;
+  rating: number;
+  comment: string;
+  date: Date;
+}
 
 const Index = () => {
   const collections = useCollectionStore((state) => state.collections);
@@ -64,6 +75,55 @@ const Index = () => {
     { name: "Mei", visitors: 1800 },
     { name: "Jun", visitors: 2800 }
   ];
+
+  // Mock feedback data
+  const feedbackData: Feedback[] = [
+    {
+      id: "feed1",
+      username: "Ahmad Fajar",
+      userAvatar: "https://i.pravatar.cc/150?img=1",
+      rating: 5,
+      comment: "Alhamdulillah, konten-konten yang disajikan sangat bermanfaat dan mudah dipahami.",
+      date: new Date("2023-11-15T08:30:00")
+    },
+    {
+      id: "feed2",
+      username: "Siti Nurhaliza",
+      userAvatar: "https://i.pravatar.cc/150?img=5",
+      rating: 4,
+      comment: "Saya suka dengan pembahasan hadist-hadistnya, tapi mungkin bisa ditambahkan referensi tambahan.",
+      date: new Date("2023-11-10T14:20:00")
+    },
+    {
+      id: "feed3",
+      username: "Budi Santoso",
+      rating: 5,
+      comment: "Ceramah audio sangat jelas dan inspiratif. Sangat membantu saya memahami ajaran Islam lebih baik.",
+      date: new Date("2023-10-28T19:45:00")
+    },
+    {
+      id: "feed4",
+      username: "Anisa Rahman",
+      userAvatar: "https://i.pravatar.cc/150?img=9",
+      rating: 3,
+      comment: "Videonya bagus tapi kadang buffering. Mungkin bisa dioptimalkan ukuran filenya.",
+      date: new Date("2023-10-20T11:15:00")
+    },
+    {
+      id: "feed5",
+      username: "Yoga Pratama",
+      rating: 5,
+      comment: "MasyaAllah, sangat membantu untuk pembelajaran sehari-hari. Terima kasih Daarul Ilmi!",
+      date: new Date("2023-10-15T16:30:00")
+    }
+  ];
+
+  // Sort feedback by date, newest first
+  const sortedFeedback = [...feedbackData].sort((a, b) => b.date.getTime() - a.date.getTime());
+
+  // Calculate average rating
+  const averageRating = feedbackData.reduce((sum, item) => sum + item.rating, 0) / feedbackData.length;
+  const roundedAverage = Math.round(averageRating * 10) / feedbackData.length; // Round to 1 decimal place
 
   // Prepare data for collection type chart
   const collectionTypeData = [
@@ -127,6 +187,30 @@ const Index = () => {
       icon: Users
     }
   ];
+
+  // Function to render star rating
+  const renderStarRating = (rating: number) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rating) {
+        stars.push(<Star key={i} className="h-4 w-4 text-yellow-500 fill-yellow-500" />);
+      } else {
+        stars.push(<StarOff key={i} className="h-4 w-4 text-gray-300" />);
+      }
+    }
+    return <div className="flex">{stars}</div>;
+  };
+
+  // Format date for display
+  const formatDate = (date: Date) => {
+    return new Intl.DateTimeFormat('id-ID', {
+      day: 'numeric', 
+      month: 'long', 
+      year: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit'
+    }).format(date);
+  };
 
   return (
     <div className="min-h-screen bg-yellow-100 px-4 pt-10 pb-16">
@@ -241,6 +325,56 @@ const Index = () => {
                 </Link>
               </motion.div>
             ))}
+          </div>
+        </motion.div>
+
+        {/* Feedback Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="mb-8"
+        >
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold text-purple-900">Feedback Pengguna</h2>
+            <div className="flex items-center gap-2">
+              <MessageCircle className="text-purple-500" size={18} />
+              <span className="text-purple-900 font-medium">{feedbackData.length} feedback</span>
+              <span className="mx-2 text-gray-400">|</span>
+              <div className="flex items-center gap-1">
+                <Star className="h-5 w-5 text-yellow-500 fill-yellow-500" />
+                <span className="text-purple-900 font-medium">{roundedAverage}</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Feedback cards */}
+          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div className="divide-y divide-gray-100">
+              {sortedFeedback.map((feedback) => (
+                <div key={feedback.id} className="p-4 hover:bg-purple-50 transition-colors">
+                  <div className="flex items-start gap-3">
+                    <Avatar className="h-10 w-10 border border-purple-100">
+                      {feedback.userAvatar ? (
+                        <AvatarImage src={feedback.userAvatar} alt={feedback.username} />
+                      ) : (
+                        <AvatarFallback className="bg-purple-200 text-purple-800">
+                          {feedback.username.substring(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                      )}
+                    </Avatar>
+                    <div className="flex-1">
+                      <div className="flex flex-wrap justify-between gap-2">
+                        <h3 className="font-medium text-gray-900">{feedback.username}</h3>
+                        <div className="text-xs text-gray-500">{formatDate(feedback.date)}</div>
+                      </div>
+                      <div className="mt-1">{renderStarRating(feedback.rating)}</div>
+                      <p className="mt-2 text-gray-600">{feedback.comment}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </motion.div>
 
