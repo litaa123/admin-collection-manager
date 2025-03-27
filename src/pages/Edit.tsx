@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useCollectionStore } from "@/lib/store";
@@ -274,25 +273,6 @@ const Edit = () => {
                   </motion.div>
 
                   <motion.div className="space-y-2" variants={fadeIn} custom={3}>
-                    <Label htmlFor="link" className="text-sm font-medium">
-                      Link Tautan
-                    </Label>
-                    <div className="relative">
-                      <Input
-                        id="link"
-                        name="link"
-                        value={formData.link}
-                        onChange={handleChange}
-                        placeholder="https://example.com/video"
-                        className="pl-9 transition-all focus:ring-2 focus:ring-purple-500"
-                      />
-                      <span className="absolute left-3 top-2.5 text-purple-500">
-                        <LinkIcon className="h-4 w-4" />
-                      </span>
-                    </div>
-                  </motion.div>
-
-                  <motion.div className="space-y-2" variants={fadeIn} custom={4}>
                     <Label htmlFor="summary" className="text-sm font-medium">
                       Rangkuman
                     </Label>
@@ -307,7 +287,7 @@ const Edit = () => {
                     />
                   </motion.div>
 
-                  <motion.div className="space-y-2" variants={fadeIn} custom={5}>
+                  <motion.div className="space-y-2" variants={fadeIn} custom={4}>
                     <Label htmlFor="speaker" className="text-sm font-medium">
                       Pemateri
                     </Label>
@@ -327,7 +307,7 @@ const Edit = () => {
                     </div>
                   </motion.div>
 
-                  <motion.div className="space-y-2" variants={fadeIn} custom={6}>
+                  <motion.div className="space-y-2" variants={fadeIn} custom={5}>
                     <Label htmlFor="mediaFile" className="text-sm font-medium">
                       {getMediaTypeLabel()}
                     </Label>
